@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from '@react-navigation/native';
 import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, titleForms } from '../../utils/colors';
 //import Api from '../../api';
 import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
 import Back from '../../../assets/icons/Back.svg';
-import { txtEmail, txtBack, txtQuestionPassword, txtInfoPassword, txtSend} from '../../utils/text';
+import { txtEmail, txtBack, txtQuestionPassword, txtInfoPassword, txtSend } from '../../utils/text';
 import GenericInput from '../components/GenericInput';
-
+import SuccessInfo from '../components/SuccessInfo';
 
 export default function RecoveryPasswordScreen() {
-    const navigation = useNavigation(); 
+    const navigation = useNavigation();
 
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+    const [isSplashVisible, setIsSplashVisible] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(true);
 
     const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
     const handleReset = async () => {
@@ -23,21 +25,30 @@ export default function RecoveryPasswordScreen() {
             setIsErrorModalVisible(true);
             return;
         }
-/*         const response = await Api.recoveryPassword(email)
-        setMessage(response);
-        setIsErrorModalVisible(true); */
+
+        setIsSuccess(true);
+        setTimeout(() => {
+            setIsSuccess(false);
+        }, 2000);
+        /*         const response = await Api.recoveryPassword(email)
+                setMessage(response);
+                setIsErrorModalVisible(true); */
     };
 
+    useEffect(() => {
+        if (!isSuccess) {
+            navigation.replace('Login');
+        }
+    }, [isSuccess, navigation]);
 
     return (
         <SafeAreaProvider>
             <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.backButton}>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.backButton}>
                     <Back width={17} height={17} />
                     <Text style={styles.backButtonText}>{txtBack}</Text>
                 </TouchableOpacity>
                 <View style={styles.header}>
-
                     <Image
                         source={require('../../../assets/RecoveryPassword.png')}
                         style={styles.image}
@@ -54,21 +65,27 @@ export default function RecoveryPasswordScreen() {
                             onChangeText={setEmail}
                             maxLength={60}
                             keyboardType="email-address"
-                        /> 
+                        />
                     </View>
                 </View>
                 <View style={styles.buttonContainer}>
 
-                <TouchableOpacity style={styles.loginButton} onPress={handleReset}>
-                    <Text style={styles.buttonText}>{txtSend}</Text>
-                </TouchableOpacity>
-            </View>
+                    <TouchableOpacity style={styles.loginButton} onPress={handleReset}>
+                        <Text style={styles.buttonText}>{txtSend}</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
             <ErrorMessageModal
                 visible={isErrorModalVisible}
                 message={message}
                 onClose={() => setIsErrorModalVisible(false)}
             />
+            {isSplashVisible && (
+                <SuccessInfo
+                    textTop="Texto acima da imagem"
+                    textBottom="Texto abaixo da imagem"
+                />
+            )}
         </SafeAreaProvider>
     );
 }
@@ -88,7 +105,7 @@ const styles = StyleSheet.create({
     backButtonText: {
         color: terciaryColor,
         fontSize: 16,
-        marginLeft: 5, 
+        marginLeft: 5,
     },
     buttonContainer: {
         flex: 1,
@@ -99,7 +116,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40,
-        marginHorizontal:12
+        marginHorizontal: 12
     },
     content: {
         flex: 1,

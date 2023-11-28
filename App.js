@@ -10,9 +10,9 @@ import { primaryColor, secondaryColor, menuColorInactive } from './src/utils/col
 import PreloadingScreen from './src/screens/preloading';
 import LoginScreen from './src/screens/login';
 import RecoveryPasswordScreen from './src/screens/recoveryPassword';
-
-/* import IntroductionScreen from './src/screens/introduction';
 import RegisterScreen from './src/screens/register';
+import SuccessInfoScreen from './src/screens/components/SuccessInfo';
+/* import IntroductionScreen from './src/screens/introduction';
 import ServicesScreen from './src/screens/services';
 import CartScreen from './src/screens/cart';
 import CreateMEIScreen from './src/screens/createMei';
@@ -152,7 +152,9 @@ export default function App() {
       <Stack.Navigator initialRouteName={PreloadingScreen}>
         <Stack.Screen name="Preloading" component={PreloadingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} /> 
         <Stack.Screen name="RecoveryPassword" component={RecoveryPasswordScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="SuccessInfo" component={SuccessInfoScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

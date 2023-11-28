@@ -5,14 +5,24 @@ import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColo
 import { useNavigation } from '@react-navigation/native';
 //import Api from '../../api';
 import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
+import RowInputs from '../../screens/components/RowInputs';
 import { ScrollView } from 'react-native';
-import { txtTittle, txtSubtittle, txtRedefinitionPassword, txtRedefinition, txtAccountQuestion, txtRegister, txtEmail, txtPassword, txtLogin, txtNotValidForm } from '../../utils/text';
+import {
+    txtRegister, txtEmail, txtPassword, txtLogin, txtNotValidForm,
+    txtName, txtDocument, txtCellphone, txtBirthDate, txtCreateAccount,
+    txtInfoCreateAccount, txtBackLogin
+} from '../../utils/text';
 import PasswordInput from '../../screens/components/PasswordInput';
 import GenericInput from '../components/GenericInput';
+import { maskCPF, maskPhoneNumber, maskBirthDate } from '../../utils/masks';
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
     const navigation = useNavigation();
 
+    const [name, setName] = useState('');
+    const [document, setDocument] = useState('');
+    const [cellphone, setCellphone] = useState('');
+    const [birthdate, setBirthDate] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -22,7 +32,7 @@ export default function LoginScreen() {
     const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
 
     const handleLogin = () => {
-        if (!email || !password) {
+        if (!email || !name || !password || !document || !cellphone || !birthdate) {
             setMessage(txtNotValidForm);
             setIsErrorModalVisible(true);
             return;
@@ -47,32 +57,59 @@ export default function LoginScreen() {
         navigation.navigate('RecoveryPassword');
     };
 
-    const handleSignUp = () => {
+    const handleSign = () => {
         // Navegar para a tela de cadastro
-         navigation.navigate('Register');
+        navigation.navigate('Login');
     };
 
     return (
         <SafeAreaProvider>
             <View style={styles.container}>
                 <ScrollView>
-
                     <View style={styles.header}>
                         <Image
                             source={require('../../../assets/InitialPhoto.png')}
                             style={styles.image}
                         />
-                        <Text style={styles.welcomeText}>{txtTittle}</Text>
-                        <Text style={styles.appText}>{txtSubtittle}</Text>
+                        <Text style={styles.welcomeText}>{txtCreateAccount}</Text>
+                        <Text style={styles.appText}>{txtInfoCreateAccount}</Text>
                     </View>
                     <View style={styles.content}>
                         <GenericInput
-                            label={txtEmail}
-                            placeholder="Email"
-                            value={email}
-                            onChangeText={setEmail}
+                            label={txtName}
+                            placeholder="Nome"
+                            value={name}
+                            onChangeText={setName}
                             maxLength={60}
                             keyboardType="email-address"
+                        />
+                        <RowInputs>
+                            <GenericInput
+                                label={txtDocument}
+                                placeholder="000.000.000-00"
+                                value={document}
+                                onChangeText={(text) => setDocument(maskCPF(text))}
+                                maxLength={60}
+                                keyboardType="numeric"
+                            />
+
+                            <GenericInput
+                                label={txtCellphone}
+                                placeholder="(00) 00000-0000"
+                                value={cellphone}
+                                onChangeText={(text) => setCellphone(maskPhoneNumber(text))}
+                                maxLength={20}
+                                keyboardType="numeric"
+                            />
+                        </RowInputs>
+
+                        <GenericInput
+                            label={txtBirthDate}
+                            placeholder="dd/mm/aaaa"
+                            value={birthdate}
+                            onChangeText={(text) => setBirthDate(maskBirthDate(text))}
+                            maxLength={10}
+                            keyboardType="numeric"
                         />
                         <PasswordInput
                             label={txtPassword}
@@ -88,15 +125,11 @@ export default function LoginScreen() {
                             style={styles.loginButton}
                             onPress={handleLogin}
                         >
-                            <Text style={styles.buttonText}>Entrar</Text>
+                            <Text style={styles.buttonText}>{txtRegister}</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={handleForgotPassword}>
-                            <Text style={styles.forgotPassword}>{txtRedefinitionPassword} <Text style={styles.bold}>{txtRedefinition}</Text></Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={handleSignUp}>
-                            <Text style={styles.signUp}>{txtAccountQuestion} <Text style={styles.bold}>{txtRegister}</Text></Text>
+                        <TouchableOpacity onPress={handleSign}>
+                            <Text style={styles.signUp}>{txtBackLogin} <Text style={styles.bold}>{txtRegister}</Text></Text>
                         </TouchableOpacity>
 
                     </View>
@@ -171,6 +204,7 @@ const styles = StyleSheet.create({
     signUp: {
         marginTop: 20,
         color: terciaryColor,
+        paddingBottom:20
     },
     bold: {
         fontWeight: 'bold',
