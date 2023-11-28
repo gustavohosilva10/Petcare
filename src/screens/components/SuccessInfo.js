@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { backgroundColor } from '../../utils/colors';
 
 const SuccessInfoScreen = ({ textTop, textBottom }) => {
     const navigation = useNavigation();
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff', // Cor de fundo da tela
+        backgroundColor: backgroundColor, 
     },
     image: {
         width: 200, 

@@ -3,7 +3,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, tittleForms } from '../../utils/colors';
 import { useNavigation } from '@react-navigation/native';
-//import Api from '../../api';
+import Api from '../../api';
 import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
 import RowInputs from '../../screens/components/RowInputs';
 import { ScrollView } from 'react-native';

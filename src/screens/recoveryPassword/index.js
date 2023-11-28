@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, titleForms } from '../../utils/colors';
+import { backgroundColor, primaryColor, terciaryColor, titleForms } from '../../utils/colors';
 //import Api from '../../api';
 import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
 import Back from '../../../assets/icons/Back.svg';
