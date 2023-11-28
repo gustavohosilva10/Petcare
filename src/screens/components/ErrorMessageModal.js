@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Modal, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { primaryColor } from '../utils/colors';
+import { backgroundColor, primaryColor } from '../../utils/colors';
 
 export default function ErrorMessageModal({ visible, message, onClose }) {
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
+
     >
       <View style={styles.container}>
         <View style={styles.modalContent}>
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: backgroundColor,
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   closeButtonText: {
-    color: 'white',
+    color: backgroundColor,
     fontSize: 16,
     fontWeight: 'bold',
   },

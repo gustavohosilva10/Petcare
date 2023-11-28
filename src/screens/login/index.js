@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, titleForms } from '../../utils/colors';
+import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, tittleForms } from '../../utils/colors';
 import { useNavigation } from '@react-navigation/native';
 //import Api from '../../api';
-//import ErrorMessageModal from '../../components/ErrorMessageModal';
+import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
 import { ScrollView } from 'react-native';
-import { txtTittle, txtSubtittle, txtRedefinitionPassword, txtRedefinition, txtAccountQuestion, txtRegister, txtEmail, txtPassword, txtLogin } from '../../utils/text';
-import Eye from '../../../assets/icons/Eye.svg';
-
+import { txtTittle, txtSubtittle, txtRedefinitionPassword, txtRedefinition, txtAccountQuestion, txtRegister, txtEmail, txtPassword, txtLogin, txtNotValidForm } from '../../utils/text';
+import PasswordInput from '../../screens/components/PasswordInput';
+import GenericInput from '../components/GenericInput';
 
 export default function LoginScreen() {
     const navigation = useNavigation();
@@ -21,19 +21,20 @@ export default function LoginScreen() {
     const [visiblePassword, setVisiblePassowrd] = useState(false);
     const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
 
-    const handleLogin = async () => {
-        /*         if (!email || !password) {
-                    setMessage("Todos os campos são obrigatórios.");
-                    setIsErrorModalVisible(true);
-                    return;
-                }
-                const response = await Api.login(email, password)
-                if (response.token) {
-                    navigation.navigate('Services');
-                } else {
-                    setMessage(response)
-                    setIsErrorModalVisible(true);
-                } */
+    const handleLogin = () => {
+        if (!email || !password) {
+            setMessage(txtNotValidForm);
+            setIsErrorModalVisible(true);
+            return;
+        }
+        /* 
+       const response = await Api.login(email, password)
+       if (response.token) {
+           navigation.navigate('Services');
+       } else {
+           setMessage(response)
+           setIsErrorModalVisible(true);
+       } */
 
     };
 
@@ -43,7 +44,7 @@ export default function LoginScreen() {
 
     const handleForgotPassword = () => {
         // Navegar para a tela de redefinição de senha
-        // navigation.navigate('RecoveryPassword');
+        navigation.navigate('RecoveryPassword');
     };
 
     const handleSignUp = () => {
@@ -65,45 +66,27 @@ export default function LoginScreen() {
                         <Text style={styles.appText}>{txtSubtittle}</Text>
                     </View>
                     <View style={styles.content}>
-
-                        <View style={styles.labelContainer}>
-                            <Text style={styles.label}>{txtEmail}</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Email"
-                                maxLength={60}
-                                keyboardType="email-address"
-                                value={email}
-                                onChangeText={setEmail}
-                            />
-                        </View>
-                        <View style={styles.labelContainer}>
-                            <Text style={styles.label}>{txtPassword}</Text>
-                            <View style={styles.labelContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Senha"
-                                    maxLength={25}
-                                    value={password}
-                                    onChangeText={setPassword}
-                                    secureTextEntry={!visiblePassword}
-                                />
-                                <TouchableOpacity
-                                    activeOpacity={1}
-                                    onPress={onPressEyePassword}
-                                    style={styles.eyeIcon}
-                                >
-                                    <Eye width={17} height={17} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                        <GenericInput
+                            label={txtEmail}
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                            maxLength={60}
+                            keyboardType="email-address"
+                        />
+                        <PasswordInput
+                            label={txtPassword}
+                            placeholder="Senha"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry={true}
+                        />
                     </View>
                     <View style={styles.buttonContainer}>
 
                         <TouchableOpacity
-                            style={[styles.loginButton, { backgroundColor: buttonEnabled ? primaryColor : 'gray' }]}
-                            onPress={() => buttonEnabled && handleLogin()}
-                            disabled={!buttonEnabled}
+                            style={styles.loginButton}
+                            onPress={handleLogin}
                         >
                             <Text style={styles.buttonText}>Entrar</Text>
                         </TouchableOpacity>
@@ -116,12 +99,13 @@ export default function LoginScreen() {
                             <Text style={styles.signUp}>Não possui uma conta? <Text style={styles.bold}>Cadastre-se aqui</Text></Text>
                         </TouchableOpacity>
 
-                        {/*   <ErrorMessageModal
-                            visible={isErrorModalVisible}
-                            message={message}
-                            onClose={() => setIsErrorModalVisible(false)}
-                        /> */}
                     </View>
+
+                    <ErrorMessageModal
+                        visible={isErrorModalVisible}
+                        message={message}
+                        onClose={() => setIsErrorModalVisible(false)}
+                    />
                 </ScrollView>
             </View>
 
@@ -152,7 +136,7 @@ const styles = StyleSheet.create({
     welcomeText: {
         fontSize: 24,
         marginBottom: 0,
-        color: primaryColor
+        color: tittleForms
     },
     appText: {
         marginTop: 0,
@@ -160,23 +144,6 @@ const styles = StyleSheet.create({
         color: terciaryColor,
         textAlign: 'center',
         paddingBottom: 60
-    },
-    labelContainer: {
-        marginBottom: 2,
-    },
-    label: {
-        fontSize: 16,
-        color: titleForms,
-        marginBottom: 5,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 5,
-        padding: 10,
-        height: 38,
-        marginBottom: 15,
-        flex: 1
     },
     buttonContainer: {
         flex: 1,
@@ -207,16 +174,6 @@ const styles = StyleSheet.create({
     },
     bold: {
         fontWeight: 'bold',
-        color: secondaryColor
-    },
-    passwordContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        position: 'relative',
-    },
-    eyeIcon: {
-        position: 'absolute',
-        right: 10,
-        marginTop: 10
-    },
+        color: primaryColor
+    }
 });
