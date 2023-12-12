@@ -33,7 +33,7 @@ import InstallmentsDebitsScreen from './src/screens/installmentsDebits';
 import MovimentInstallmentsDebitsScreen from './src/screens/movimentInstallmentsDebits'; 
 import CreditCardScreen from './src/screens/creditCard';
 import ConsultHistoryScreen from './src/screens/consultHistory'; */
-
+import ButtomTab from './src/screens/components/ButtomTab';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -84,16 +84,9 @@ const Tab = createBottomTabNavigator();
         name="Home2"
         component={HomeScreen}
         options={{
-          tabBarLabel: 'x',
+          tabBarLabel: 'Novo Pet',
           tabBarIcon: ({ focused }) => (
-            <Image
-              source={require('./assets/iconHome2.png')}
-              style={{
-                width: 22,
-                height: 22,
-                resizeMode: 'cover',
-              }}
-            />
+            <ButtomTab  style={{ paddingTop: 25 }}/>
           ),
           headerShown: false,
         }}
