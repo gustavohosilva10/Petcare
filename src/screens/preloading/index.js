@@ -11,9 +11,9 @@ export default function PreloadingScreen() {
         // Verifica se o usuário já completou a introdução anteriormente
         AsyncStorage.getItem('completedIntroduction').then(value => {
             if (value === 'completed') {
-                navigation.navigate('Login');
+                navigation.navigate('Home');
             }else{
-                navigation.navigate('Login');
+                navigation.navigate('Home');
 
                 //navigation.navigate('Introduction');
             }

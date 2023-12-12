@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BASE_API = 'https://empresasenegociosmei.com.br'; //'https://empresasenegociosmei.com.br';
+const BASE_API = 'https://4830-179-251-105-27.ngrok-free.app'; 
 
 export default {
   login: async (email, password) => {
@@ -11,40 +11,52 @@ export default {
         password: password,
       });
 
-      if (response.data && response.data.token) {
-        const token = response.data.token;
+      if (response.data.token) {
         await AsyncStorage.setItem('token', token);
+
         return response.data;
-      } else if (response.data && response.data.error) {
-        return response.data.error;
+      }  
+      if (response.data.errors) {
+        return { errors: response.data.errors };
       }
+
+      if (response.data.error) {
+        return { error: response.data.error };
+      }
+  
     } catch (error) {
-      return 'Ocorreu um erro desconhecido durante o login.';
+      if (error.isAxiosError && error.response.status === 422) {
+        return { errors: error.response.data.errors };
+      } else {
+        return 'Erro ao realizar o cadastro';
+      }
     }
   },
-  register: async (name, document, cellphone, email, password) => {
+  register: async (email, name, password, document, cellphone, birthdate) => {
     try {
       const data = {
+        email: email,
         name: name,
+        password: password,
         document: document,
         cellphone: cellphone,
-        email: email,
-        password: password
+        birth_date: birthdate
       }
-
+  
       const response = await axios.post(`${BASE_API}/api/register`, data);
-      
-      if (response.data && response.data.token) {
-        const token = response.data.token;
-
-        await AsyncStorage.setItem('token', token);
-        return response.data; 
-
-      } else if (response.data && response.data.error) {
-        return response.data.error;
-      } 
+  
+      if (response.data.message) {
+        return response.data;
+      } else if (response.data.errors) {
+        return { errors: response.data.errors };
+      }
+  
     } catch (error) {
-      return 'Ocorreu um erro desconhecido durante o registro.';
+      if (error.isAxiosError && error.response.status === 422) {
+        return { errors: error.response.data.errors };
+      } else {
+        return 'Erro ao realizar o cadastro';
+      }
     }
   },
   recoveryPassword: async (email) => {

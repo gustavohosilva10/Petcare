@@ -5,15 +5,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Image } from 'react-native';
 
-import { primaryColor, secondaryColor, menuColorInactive } from './src/utils/colors';
+import { primaryColor, secondaryColor, menuColorInactive, terciaryColor, backgroundColor } from './src/utils/colors';
 
 import PreloadingScreen from './src/screens/preloading';
 import LoginScreen from './src/screens/login';
 import RecoveryPasswordScreen from './src/screens/recoveryPassword';
 import RegisterScreen from './src/screens/register';
 import SuccessInfoScreen from './src/screens/components/SuccessInfo';
-/* import IntroductionScreen from './src/screens/introduction';
-import ServicesScreen from './src/screens/services';
+import IntroductionScreen from './src/screens/introduction';
+import HomeScreen from './src/screens/home';
+/*import ServicesScreen from './src/screens/services';
 import CartScreen from './src/screens/cart';
 import CreateMEIScreen from './src/screens/createMei';
 import CancelMEIScreen from './src/screens/cancelMei';
@@ -37,47 +38,42 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
-/* function HomeTabs() {
+ function HomeTabs() {
 
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: 'white',
-        inactiveTintColor: menuColorInactive,
+        activeTintColor: terciaryColor,
+        inactiveTintColor: terciaryColor,
         style: {
-          height: 100,
+          height: 130,
           backgroundColor: secondaryColor,
           borderTopWidth: 0,
-          elevation: 5,
+          elevation: 2,
         },
         labelStyle: {
-          fontSize: 14,
+          fontSize: 16,
         },
         tabStyle: {
           flexDirection: 'column', 
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: primaryColor,
-        },
-        indicatorStyle: {
-          height: 3,
-          backgroundColor: 'red',
+          backgroundColor: backgroundColor,
         },
       }}
     >
       <Tab.Screen
-        name="Services"
-        component={ServicesScreen}
+        name="Home1"
+        component={HomeScreen}
         options={{
-          tabBarLabel: 'Serviços',
+          tabBarLabel: 'Home',
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./assets/serv.png')}
+              source={require('./assets/Group.png')}
               style={{
-                width: 31,
-                height: 25,
+                width: 22,
+                height: 22,
                 resizeMode: 'cover',
-                tintColor: focused ? 'white' : menuColorInactive,
               }}
             />
           ),
@@ -85,18 +81,17 @@ const Tab = createBottomTabNavigator();
         }}
       />
       <Tab.Screen
-        name="RequestsScreen"
-        component={RequestsScreen}
+        name="Home2"
+        component={HomeScreen}
         options={{
-          tabBarLabel: 'Pedidos',
+          tabBarLabel: 'x',
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./assets/ped.png')}
+              source={require('./assets/iconHome2.png')}
               style={{
-                width: 24,
-                height: 24,
+                width: 22,
+                height: 22,
                 resizeMode: 'cover',
-                tintColor: focused ? 'white' : menuColorInactive,
               }}
             />
           ),
@@ -104,47 +99,27 @@ const Tab = createBottomTabNavigator();
         }}
       />
       <Tab.Screen
-        name="CartScreen"
-        component={CartScreen}
-        options={{
-          tabBarLabel: 'Carrinho',
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={require('./assets/cart.png')}
-              style={{
-                width: 24,
-                height: 24,
-                resizeMode: 'cover',
-                tintColor: focused ? 'white' : menuColorInactive,
-              }}
-            />
-          ),
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Home3"
+        component={HomeScreen}
         options={{
           tabBarLabel: 'Perfil',
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('./assets/perf.png')}
+              source={require('./assets/iconHome2.png')}
               style={{
-                width: 24,
-                height: 24,
+                width: 22,
+                height: 22,
                 resizeMode: 'cover',
-                tintColor: focused ? 'white' : menuColorInactive,
               }}
             />
           ),
           headerShown: false,
         }}
       />
-
+     
     </Tab.Navigator>
   );
-} */
+} 
 
 export default function App() {
   return (
@@ -155,6 +130,8 @@ export default function App() {
         <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} /> 
         <Stack.Screen name="RecoveryPassword" component={RecoveryPasswordScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SuccessInfo" component={SuccessInfoScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false }} /> 
+        <Stack.Screen name="Home" component={HomeTabs} options={{ headerShown: false }} /> 
       </Stack.Navigator>
     </NavigationContainer>
   );

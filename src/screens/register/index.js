@@ -31,21 +31,28 @@ export default function RegisterScreen() {
     const [visiblePassword, setVisiblePassowrd] = useState(false);
     const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
 
-    const handleLogin = () => {
+    const handleRegister = async () => {
         if (!email || !name || !password || !document || !cellphone || !birthdate) {
             setMessage(txtNotValidForm);
             setIsErrorModalVisible(true);
             return;
         }
-        /* 
-       const response = await Api.login(email, password)
-       if (response.token) {
-           navigation.navigate('Services');
-       } else {
-           setMessage(response)
-           setIsErrorModalVisible(true);
-       } */
-
+         
+        try {
+            const response = await Api.register(email,name,password,document,cellphone, birthdate)
+            if (response && response.message) {
+                setMessage(response.message);
+                setIsErrorModalVisible(true);
+              } else {
+                if (response && response.errors) {
+                  setMessage(response.errors.join('\n'));
+                  setIsErrorModalVisible(true);
+                }
+              }
+        } catch (error) {
+            setMessage('Erro ao realizar o cadastro');
+            setIsErrorModalVisible(true);
+        }
     };
 
     const onPressEyePassword = () => {
@@ -53,12 +60,10 @@ export default function RegisterScreen() {
     }
 
     const handleForgotPassword = () => {
-        // Navegar para a tela de redefinição de senha
         navigation.navigate('RecoveryPassword');
     };
 
     const handleSign = () => {
-        // Navegar para a tela de cadastro
         navigation.navigate('Login');
     };
 
@@ -111,6 +116,14 @@ export default function RegisterScreen() {
                             maxLength={10}
                             keyboardType="numeric"
                         />
+                         <GenericInput
+                            label={txtEmail}
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                            maxLength={60}
+                            keyboardType="email-address"
+                        />
                         <PasswordInput
                             label={txtPassword}
                             placeholder="Senha"
@@ -120,18 +133,16 @@ export default function RegisterScreen() {
                         />
                     </View>
                     <View style={styles.buttonContainer}>
-
                         <TouchableOpacity
                             style={styles.loginButton}
-                            onPress={handleLogin}
+                            onPress={handleRegister}
                         >
                             <Text style={styles.buttonText}>{txtRegister}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={handleSign}>
-                            <Text style={styles.signUp}>{txtBackLogin} <Text style={styles.bold}>{txtRegister}</Text></Text>
+                            <Text style={styles.signUp}>{txtBackLogin} <Text style={styles.bold}>{txtLogin}</Text></Text>
                         </TouchableOpacity>
-
                     </View>
 
                     <ErrorMessageModal

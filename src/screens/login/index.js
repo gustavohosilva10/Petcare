@@ -3,7 +3,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, tittleForms } from '../../utils/colors';
 import { useNavigation } from '@react-navigation/native';
-//import Api from '../../api';
+import Api from '../../api';
 import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
 import { ScrollView } from 'react-native';
 import { txtTittle, txtSubtittle, txtRedefinitionPassword, txtRedefinition, txtAccountQuestion, txtRegister, txtEmail, txtPassword, txtLogin, txtNotValidForm } from '../../utils/text';
@@ -21,20 +21,33 @@ export default function LoginScreen() {
     const [visiblePassword, setVisiblePassowrd] = useState(false);
     const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!email || !password) {
             setMessage(txtNotValidForm);
             setIsErrorModalVisible(true);
             return;
         }
-        /* 
-       const response = await Api.login(email, password)
-       if (response.token) {
-           navigation.navigate('Services');
-       } else {
-           setMessage(response)
-           setIsErrorModalVisible(true);
-       } */
+        try {
+            const response = await Api.login(email, password)
+
+            if (response && response.token) {
+                setMessage('login feito com sucesso!');
+                setIsErrorModalVisible(true);
+              } else {
+                if (response && response.errors) {
+                  setMessage(response.errors.join('\n'));
+                  setIsErrorModalVisible(true);
+                }
+                if (response && response.error) {
+                    setMessage(response.error);
+                    setIsErrorModalVisible(true);
+                  }
+              }
+        } catch (error) {
+            console.log(error)
+            setMessage('Erro ao realizar o cadastro');
+            setIsErrorModalVisible(true);
+        }
 
     };
 
@@ -88,7 +101,7 @@ export default function LoginScreen() {
                             style={styles.loginButton}
                             onPress={handleLogin}
                         >
-                            <Text style={styles.buttonText}>Entrar</Text>
+                            <Text style={styles.buttonText}>{txtLogin}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={handleForgotPassword}>

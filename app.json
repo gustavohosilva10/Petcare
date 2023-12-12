@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "petCare",
+    "name": "PetCare",
     "slug": "petCare",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/iconLogo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.gustavodev10.petCare"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e25bea73-7e94-41c6-98e6-01261da4b35d"
+      }
     }
   }
 }
