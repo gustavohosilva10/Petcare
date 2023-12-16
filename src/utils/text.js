@@ -50,3 +50,6 @@ export const txtTittleCardVaccine = 'Cartão de vacinas';
 export const txtSubTittleCardVaccine = 'Registre e acompanhe as vacinas';
 export const txtTittleCardMedicament = 'Medicamentos';
 export const txtSubiTittleCardMedicament = 'Registre os medicamentos do seu pet';
+export const txtTittleCardIdentification = 'Identificação';
+export const txtSubiTittleCardIdentification = 'Econtre e monitore o seu pet';
+

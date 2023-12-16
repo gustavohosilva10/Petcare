@@ -2,10 +2,12 @@ import { React, useCallback } from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { backgroundColor, secondaryColor, terciaryColor, tittleForms } from '../../utils/colors';
-import { txtWelcome, txtMyPets, txtNonePet, txtCategoys, txtTittleCardVaccine, txtSubTittleCardVaccine, txtTittleCardMedicament, txtSubiTittleCardMedicament } from '../../utils/text';
+import { txtWelcome, txtMyPets, txtNonePet, txtCategoys, txtTittleCardVaccine, txtSubTittleCardVaccine, txtTittleCardMedicament, txtSubiTittleCardMedicament,
+txtTittleCardIdentification, txtSubiTittleCardIdentification } from '../../utils/text';
 import { useFonts } from 'expo-font';
 import FontLoader from '../components/FontLoader';
 import CardAction from '../components/CardAction';
+import CardPet from '../components/CardPet';
 
 const HomeScreen = () => {
 
@@ -28,15 +30,18 @@ const HomeScreen = () => {
                         <View style={styles.titleContent}>
                             <Text style={styles.nameTitlePetText}>{txtMyPets}</Text>
                         </View>
+                        <View style={styles.petCardContent}>
+                         <CardPet/>
+                        </View>
 
-                        <View style={styles.noPetContainer}>
-                            <Text>{txtNonePet}</Text>
+                        {/*<View style={styles.noPetContainer}>
+                             <Text>{txtNonePet}</Text>
                             <Image
                                 source={require('../../../assets/IconHome.png')}
                                 style={styles.imageNonePet}
                                 resizeMode="cover"
-                            />
-                        </View>
+                            /> 
+                        </View>*/}
 
                         <View style={styles.titleContent}>
                             <Text style={styles.nameTitlePetText}>{txtCategoys}</Text>
@@ -44,7 +49,8 @@ const HomeScreen = () => {
 
                         <View style={styles.cardContent}>
                             <CardAction image={require('../../../assets/IconVaccines.png')} tittle={txtTittleCardVaccine} subTittle={txtTittleCardVaccine} />
-                            <CardAction image={require('../../../assets/IconVaccines.png')} tittle={txtTittleCardMedicament} subTittle={txtSubiTittleCardMedicament} />
+                            <CardAction image={require('../../../assets/IconMedic.png')} tittle={txtTittleCardMedicament} subTittle={txtSubiTittleCardMedicament} />
+                            <CardAction image={require('../../../assets/IconQRCode.png')} tittle={txtTittleCardIdentification} subTittle={txtSubiTittleCardIdentification} />
                         </View>
 
                     </View>
@@ -67,6 +73,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Lato-Regular',
         padding: 28,
     },
+    petCardContent:{
+        justifyContent:'center'
+    },  
     nameText: {
         fontSize: 20,
         fontWeight: 'bold',
