@@ -14,13 +14,14 @@ import RegisterScreen from './src/screens/register';
 import SuccessInfoScreen from './src/screens/components/SuccessInfo';
 import IntroductionScreen from './src/screens/introduction';
 import HomeScreen from './src/screens/home';
+import ProfileScreen from './src/screens/profile';
+
 /*import ServicesScreen from './src/screens/services';
 import CartScreen from './src/screens/cart';
 import CreateMEIScreen from './src/screens/createMei';
 import CancelMEIScreen from './src/screens/cancelMei';
 import RequestsScreen from './src/screens/requests';
 import PixScreen from './src/screens/pix';
-import ProfileScreen from './src/screens/profile';
 import UpdatePasswordScreen  from './src/screens/updatePassword';
 import UpdateProfileScreen from './src/screens/updateProfile';
 import MovimentRequestScreen from './src/screens/movimentRequest';
@@ -39,12 +40,13 @@ const Tab = createBottomTabNavigator();
 
 
  function HomeTabs() {
-
+  const [isProfileTabFocused, setProfileTabFocus] = useState(false);
   return (
     <Tab.Navigator
       tabBarOptions={{
         activeTintColor: terciaryColor,
         inactiveTintColor: terciaryColor,
+        tabBarVisible: isProfileTabFocused,
         style: {
           height: 130,
           backgroundColor: secondaryColor,
@@ -92,9 +94,9 @@ const Tab = createBottomTabNavigator();
         }}
       />
       <Tab.Screen
-        name="Home3"
-        component={HomeScreen}
-        options={{
+        name="ProfileTab"
+        component={ProfileScreen}
+        options={({ route }) => ({
           tabBarLabel: 'Perfil',
           tabBarIcon: ({ focused }) => (
             <Image
@@ -107,7 +109,15 @@ const Tab = createBottomTabNavigator();
             />
           ),
           headerShown: false,
-        }}
+        })}
+        listeners={({ navigation, route }) => ({
+          focus: () => {
+            setProfileTabFocus(true);
+          },
+          blur: () => {
+            setProfileTabFocus(false);
+          },
+        })}
       />
      
     </Tab.Navigator>
@@ -125,6 +135,7 @@ export default function App() {
         <Stack.Screen name="SuccessInfo" component={SuccessInfoScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false }} /> 
         <Stack.Screen name="Home" component={HomeTabs} options={{ headerShown: false }} /> 
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} /> 
       </Stack.Navigator>
     </NavigationContainer>
   );

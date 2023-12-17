@@ -53,3 +53,8 @@ export const txtSubiTittleCardMedicament = 'Registre os medicamentos do seu pet'
 export const txtTittleCardIdentification = 'Identificação';
 export const txtSubiTittleCardIdentification = 'Econtre e monitore o seu pet';
 
+// perfil
+export const txtCreatedAccount = 'Criação da conta:';
+export const txtMyInfo = 'Meus dados';
+export const txtUpdateInfo = 'Edite as informações do seu perfil ';
+
