@@ -56,5 +56,6 @@ export const txtSubiTittleCardIdentification = 'Econtre e monitore o seu pet';
 // perfil
 export const txtCreatedAccount = 'Criação da conta:';
 export const txtMyInfo = 'Meus dados';
-export const txtUpdateInfo = 'Edite as informações do seu perfil ';
-
+export const txtUpdateInfo = 'Edite as informações do seu perfil';
+export const txtMyProfile = 'Meu perfil';
+export const txtMyProfileInfo = 'Edite as informações do seu perfil sempre que necessario';
