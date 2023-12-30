@@ -1,15 +1,83 @@
-import { React, useCallback } from 'react';
+import { React, useCallback, useState } from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { backgroundColor, secondaryColor, terciaryColor, tittleForms } from '../../utils/colors';
-import { txtWelcome, txtMyPets, txtNonePet, txtCategoys, txtTittleCardVaccine, txtSubTittleCardVaccine, txtTittleCardMedicament, txtSubiTittleCardMedicament,
-txtTittleCardIdentification, txtSubiTittleCardIdentification } from '../../utils/text';
+import {
+    txtWelcome, txtMyPets, txtNonePet, txtCategoys, txtTittleCardVaccine, txtSubTittleCardVaccine, txtTittleCardMedicament, txtSubiTittleCardMedicament,
+    txtTittleCardIdentification, txtSubiTittleCardIdentification
+} from '../../utils/text';
 import { useFonts } from 'expo-font';
 import FontLoader from '../components/FontLoader';
 import CardAction from '../components/CardAction';
 import CardPet from '../components/CardPet';
+import Api from '../../api';
+import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
+import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = () => {
+    const navigation = useNavigation();
+
+    const [name, setName] = useState('');
+    const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+    const [message, setMessage] = useState('');
+    const [pets, setPets] = useState([]);
+
+    useFocusEffect(
+        useCallback(() => {
+            const UserData = async () => {
+                try {
+                    const response = await Api.getUser();
+
+                    if (response && response.data.id) {
+                        setName(response.data.name);
+                    } else {
+                        if (response && response.errors) {
+                            setMessage(response.errors.join('\n'));
+                            setIsErrorModalVisible(true);
+                        }
+                        if (response && response.error) {
+                            setMessage(response.error);
+                            setIsErrorModalVisible(true);
+                        }
+                    }
+                } catch (error) {
+                    setMessage('Erro ao carregar dados do usuário');
+                    setIsErrorModalVisible(true);
+                }
+            };
+            UserData();
+
+        }, [])
+    );
+
+    useFocusEffect(
+        useCallback(() => {
+            const PetData = async () => {
+                try {
+                    const response = await Api.getPets();
+
+                    if (response && response.data) {
+                        setPets(response.data);
+                    } else {
+                        if (response && response.errors) {
+                            setMessage(response.errors.join('\n'));
+                            setIsErrorModalVisible(true);
+                        }
+                        if (response && response.error) {
+                            setMessage(response.error);
+                            setIsErrorModalVisible(true);
+                        }
+                    }
+                } catch (error) {
+                    setMessage('Erro ao carregar dados do usuário');
+                    setIsErrorModalVisible(true);
+                }
+            };
+            PetData();
+
+        }, [])
+    );
 
     return (
         <SafeAreaProvider>
@@ -18,7 +86,7 @@ const HomeScreen = () => {
 
                     <View style={styles.container}>
                         <View style={styles.titleContent}>
-                            <Text style={styles.nameText}>{txtWelcome}</Text>
+                            <Text style={styles.nameText}>{txtWelcome}{name}</Text>
                         </View>
 
                         <Image
@@ -26,22 +94,26 @@ const HomeScreen = () => {
                             style={styles.image}
                             resizeMode="cover"
                         />
-
                         <View style={styles.titleContent}>
                             <Text style={styles.nameTitlePetText}>{txtMyPets}</Text>
                         </View>
-                        <View style={styles.petCardContent}>
-                         <CardPet/>
-                        </View>
+                        {pets.length === 0 ? (
+                            <View style={styles.noPetContainer}>
+                                <Text>{txtNonePet}</Text>
+                                <Image
+                                    source={require('../../../assets/IconHome.png')}
+                                    style={styles.imageNonePet}
+                                    resizeMode="cover"
+                                />
+                            </View>
+                        ) : (
+                            <>
 
-                        {/*<View style={styles.noPetContainer}>
-                             <Text>{txtNonePet}</Text>
-                            <Image
-                                source={require('../../../assets/IconHome.png')}
-                                style={styles.imageNonePet}
-                                resizeMode="cover"
-                            /> 
-                        </View>*/}
+                                <View style={styles.petCardContent}>
+                                    <CardPet />
+                                </View>
+                            </>
+                        )}
 
                         <View style={styles.titleContent}>
                             <Text style={styles.nameTitlePetText}>{txtCategoys}</Text>
@@ -52,7 +124,11 @@ const HomeScreen = () => {
                             <CardAction image={require('../../../assets/IconMedic.png')} tittle={txtTittleCardMedicament} subTittle={txtSubiTittleCardMedicament} />
                             <CardAction image={require('../../../assets/IconQRCode.png')} tittle={txtTittleCardIdentification} subTittle={txtSubiTittleCardIdentification} />
                         </View>
-
+                        <ErrorMessageModal
+                            visible={isErrorModalVisible}
+                            message={message}
+                            onClose={() => setIsErrorModalVisible(false)}
+                        />
                     </View>
                 </ScrollView>
 
@@ -73,9 +149,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Lato-Regular',
         padding: 28,
     },
-    petCardContent:{
-        justifyContent:'center'
-    },  
+    petCardContent: {
+        justifyContent: 'center'
+    },
     nameText: {
         fontSize: 20,
         fontWeight: 'bold',

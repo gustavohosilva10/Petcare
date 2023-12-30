@@ -15,7 +15,7 @@ import SuccessInfoScreen from './src/screens/components/SuccessInfo';
 import IntroductionScreen from './src/screens/introduction';
 import HomeScreen from './src/screens/home';
 import ProfileScreen from './src/screens/profile';
-
+import UpdateProfileScreen from './src/screens/updateProfile';
 /*import ServicesScreen from './src/screens/services';
 import CartScreen from './src/screens/cart';
 import CreateMEIScreen from './src/screens/createMei';
@@ -23,7 +23,6 @@ import CancelMEIScreen from './src/screens/cancelMei';
 import RequestsScreen from './src/screens/requests';
 import PixScreen from './src/screens/pix';
 import UpdatePasswordScreen  from './src/screens/updatePassword';
-import UpdateProfileScreen from './src/screens/updateProfile';
 import MovimentRequestScreen from './src/screens/movimentRequest';
 import MovimentRequestMeiCancelScreen from './src/screens/movimentRequestMeiCancel';
 import TaxReturnScreen from './src/screens/taxReturn';
@@ -136,6 +135,7 @@ export default function App() {
         <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false }} /> 
         <Stack.Screen name="Home" component={HomeTabs} options={{ headerShown: false }} /> 
         <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} /> 
+        <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{ headerShown: false }} /> 
       </Stack.Navigator>
     </NavigationContainer>
   );

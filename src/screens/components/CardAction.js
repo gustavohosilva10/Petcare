@@ -5,10 +5,10 @@ import { View, Modal, Text, TouchableOpacity, StyleSheet, Image} from 'react-nat
 import { backgroundColor, secondaryColor, terciaryColor, tittleForms, primaryColor } from '../../utils/colors';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-export default function CardAction({ image, tittle, subTittle }) {
+export default function CardAction({ image, tittle, subTittle, onPress}) {
     return (
         <>
-            <TouchableOpacity style={styles.card} >
+            <TouchableOpacity style={styles.card} onPress={onPress}>
                 <Image
                     source={image}
                     width={24}

@@ -8,14 +8,11 @@ import { backgroundColor } from '../../utils/colors';
 export default function PreloadingScreen() {
     const navigation = useNavigation();
      useFocusEffect(() => {
-        // Verifica se o usuário já completou a introdução anteriormente
-        AsyncStorage.getItem('completedIntroduction').then(value => {
-            if (value === 'completed') {
+        AsyncStorage.getItem('token').then(value => {
+            if (value) {
                 navigation.navigate('Home');
             }else{
-                navigation.navigate('Home');
-
-                //navigation.navigate('Introduction');
+                navigation.navigate('Login');
             }
         });
     });

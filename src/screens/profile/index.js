@@ -1,85 +1,151 @@
-import React from 'react';
+import { React, useCallback, useState } from 'react';
+
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { backgroundColor, terciaryColor, secondaryColor } from '../../utils/colors';
 import Back from '../../../assets/icons/Back.svg';
 import CardAction from '../components/CardAction';
-import { txtBack, txtMyInfo, txtUpdateInfo, txtCreatedAccount, txtMyProfile, txtMyProfileInfo, txtEmail, txtName } from '../../utils/text';
+import { txtBack, txtMyInfo, txtUpdateInfo, txtCreatedAccount, txtMyProfile, txtMyProfileInfo, txtEmail, txtName, txtDocument, txtCellphone } from '../../utils/text';
 import { useFonts } from 'expo-font';
 import FontLoader from '../components/FontLoader';
+import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
+import { useFocusEffect } from '@react-navigation/native';
+import Api from '../../api';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
 
+    const [name, setName] = useState('');
+    const [document, setDocument] = useState('');
+    const [cellphone, setCellphone] = useState('');
+    const [email, setEmail] = useState('');
+    const [account, setAccount] = useState('');
+    const [info, setInfo] = useState(false);
+
+    const goBack = () => {
+        navigation.navigate('Home1');
+    };
+
+    const goData = () => {
+        setInfo(true);
+    }
+
+    const goUpdate = () => {
+        navigation.navigate('UpdateProfile');
+    }
+
+
+    useFocusEffect(
+        useCallback(() => {
+            const UserData = async () => {
+                try {
+                    const response = await Api.getUser();
+
+                    if (response && response.data.id) {
+                        setName(response.data.name);
+                        setDocument(response.data.document);
+                        setCellphone(response.data.cellphone);
+                        setEmail(response.data.email);
+                        setAccount(response.data.created_at);
+                    } else {
+                        if (response && response.errors) {
+                            setMessage(response.errors.join('\n'));
+                            setIsErrorModalVisible(true);
+                        }
+                        if (response && response.error) {
+                            setMessage(response.error);
+                            setIsErrorModalVisible(true);
+                        }
+                    }
+                } catch (error) {
+                    setMessage('Erro ao carregar dados do usuário');
+                    setIsErrorModalVisible(true);
+                }
+            };
+            UserData();
+
+        }, [])
+    );
+
+
     return (
         <SafeAreaProvider>
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.backButton}>
+                <TouchableOpacity onPress={goBack} style={styles.backButton}>
                     <Back width={17} height={17} />
                     <Text style={styles.backButtonText}>{txtBack}</Text>
                 </TouchableOpacity>
 
-                {/*      <View style={styles.contentContainer}>
-                    <View style={styles.userInfoContainer}>
-                        <Image
-                            source={require('../../../assets/iconPat.png')}
-                            style={styles.profileImage}
-                        />
-                        <View style={styles.userInfoText}>
-                            <Text style={styles.userName}>Fulado e Sobrenome </Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.subTittle}>
-                    <Text style={styles.userSubtitle}>{txtCreatedAccount} 25/02/2022</Text>
-                </View>
-
-                <View style={styles.cardContent}>
-                    <CardAction image={require('../../../assets/iconProf.png')} tittle={txtMyInfo} subTittle={txtUpdateInfo} />
-                </View> */}
-                <View style={styles.contentContainer}>
-                    <View style={styles.userInfoText}>
-                        <Text style={styles.userName}>{txtMyProfile}</Text>
-                    </View>
-                </View>
-                <View style={styles.subTittle}>
-                    <Text style={styles.userSubtitle}>{txtMyProfileInfo}</Text>
-                </View>
-
-                <View style={styles.contentData}>
-                    <View style={styles.subTittle}>
-                        <Text style={styles.userSubtitle}>{txtName}</Text>
-                        <Text style={styles.userInfo}>Fulano e Sobrenome</Text>
-                    </View>
-
-                    <View style={styles.infoBetween}>
-                        <View style={styles.subTittle}>
-                            <Text style={styles.userSubtitle}>{txtName}</Text>
-                            <Text style={styles.userInfo}>Fulano e Sobrenome</Text>
+                {info === false ? (
+                    <>
+                        <View style={styles.contentContainer}>
+                            <View style={styles.userInfoContainer}>
+                                <Image
+                                    source={require('../../../assets/iconPat.png')}
+                                    style={styles.profileImage}
+                                />
+                                <View style={styles.userInfoText}>
+                                    <Text style={styles.userName}>{name}</Text>
+                                </View>
+                            </View>
                         </View>
                         <View style={styles.subTittle}>
-                            <Text style={styles.userSubtitle}>{txtName}</Text>
-                            <Text style={styles.userInfo}>Fulano e Sobrenome</Text>
+                            <Text style={styles.userSubtitle}>{txtCreatedAccount} {account}</Text>
                         </View>
-                    </View>
 
-                    <View style={styles.subTittle}>
-                        <Text style={styles.userSubtitle}>{txtEmail}</Text>
-                        <Text style={styles.userInfo}>fulano.sobrenome@gmail.com</Text>
-                    </View>
-                </View>
+                        <View style={styles.cardContent}>
+                            <CardAction image={require('../../../assets/iconProf.png')} tittle={txtMyInfo} subTittle={txtUpdateInfo} onPress={goData} />
+                        </View>
+                    </>
 
-                <View style={styles.contentData}>
-
-                <View style={styles.updateContent}>
+                ) :
+                    <>
+                        <View style={styles.contentContainer}>
+                            <View style={styles.userInfoText}>
+                                <Text style={styles.userName}>{txtMyProfile}</Text>
+                            </View>
+                        </View>
                         <View style={styles.subTittle}>
-                            <TouchableOpacity>
-                                <Text style={styles.updateInfo}>Editar informações</Text>
-                            </TouchableOpacity>
+                            <Text style={styles.userSubtitle}>{txtMyProfileInfo}</Text>
                         </View>
-                    </View>
-                </View>
+
+                        <View style={styles.contentData}>
+                            <View style={styles.subTittle}>
+                                <Text style={styles.userSubtitle}>{txtName}</Text>
+                                <Text style={styles.userInfo}>{name}</Text>
+                            </View>
+
+                            <View style={styles.infoBetween}>
+                                <View style={styles.subTittle}>
+                                    <Text style={styles.userSubtitle}>{txtDocument}</Text>
+                                    <Text style={styles.userInfo}>{document}</Text>
+                                </View>
+                                <View style={styles.subTittle}>
+                                    <Text style={styles.userSubtitle}>{txtCellphone}</Text>
+                                    <Text style={styles.userInfo}>{cellphone}</Text>
+                                </View>
+                            </View>
+
+                            <View style={styles.subTittle}>
+                                <Text style={styles.userSubtitle}>{txtEmail}</Text>
+                                <Text style={styles.userInfo}>{email}</Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.contentData}>
+
+                            <View style={styles.updateContent}>
+                                <View style={styles.subTittle}>
+                                    <TouchableOpacity onPress={goUpdate}>
+                                        <Text style={styles.updateInfo}>Editar informações</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </>
+
+                }
 
             </View>
         </SafeAreaProvider>
@@ -104,7 +170,7 @@ const styles = StyleSheet.create({
     },
     subTittle: {
         paddingHorizontal: 20,
-        padding:10
+        padding: 10
     },
     contentContainer: {
         flexDirection: 'row',
@@ -137,23 +203,23 @@ const styles = StyleSheet.create({
         color: terciaryColor,
         fontFamily: 'Lato-Regular',
     },
-    contentData:{
-        marginTop:40
+    contentData: {
+        marginTop: 40
     },
     cardContent: {
         paddingTop: 50,
         marginHorizontal: 20,
         flex: 1,
     },
-    infoBetween:{
-        alignContent:'space-between',
-        flexDirection:'row'
+    infoBetween: {
+        alignContent: 'space-between',
+        flexDirection: 'row'
     },
-    updateContent:{
-        justifyContent:'flex-end',
-        alignSelf:'flex-end'
+    updateContent: {
+        justifyContent: 'flex-end',
+        alignSelf: 'flex-end'
     },
-    updateInfo:{
+    updateInfo: {
         fontSize: 14,
         color: secondaryColor,
         fontFamily: 'Lato-Regular',

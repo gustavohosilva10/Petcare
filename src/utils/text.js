@@ -40,7 +40,7 @@ export const txtSubTittleThree = 'Não precisa mais passar por problemas com o c
 
 
 // welcome 
-export const txtWelcome = 'Olá';
+export const txtWelcome = 'Olá, ';
 export const txtMyPets = 'Meus pets';
 export const txtNonePet = 'Cadastre o seu pet!';
 export const txtCategoys = 'Categorias';
@@ -59,3 +59,6 @@ export const txtMyInfo = 'Meus dados';
 export const txtUpdateInfo = 'Edite as informações do seu perfil';
 export const txtMyProfile = 'Meu perfil';
 export const txtMyProfileInfo = 'Edite as informações do seu perfil sempre que necessario';
+export const txtUpdateProfileTitle = 'Editar perfil';
+
+export const txtSave = 'Salvar';
