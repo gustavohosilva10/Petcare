@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BASE_API = 'https://ef66-179-251-228-203.ngrok-free.app'; 
+const BASE_API = 'https://5416-179-251-228-203.ngrok-free.app'; 
 
 export default {
   login: async (email, password) => {
@@ -10,8 +10,10 @@ export default {
         email: email,
         password: password,
       });
-      if (response.data.token) {
+      console.warn(response)
+      /* if (response.data.token) {
         await AsyncStorage.setItem('token', response.data.token);
+
         return response;
       }  
       if (response.data.errors) {
@@ -20,13 +22,14 @@ export default {
 
       if (response.data.error) {
         return { error: response.data.error };
-      }
+      } */
   
     } catch (error) {
+      console.warn(error)
       if (error.isAxiosError && error.response.status === 422) {
         return { errors: error.response.data.errors };
       } else {
-        return 'Erro ao realizar o cadastro';
+        return 'Erro ao realizar o login';
       }
     }
   },

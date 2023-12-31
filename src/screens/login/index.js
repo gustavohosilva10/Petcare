@@ -29,10 +29,8 @@ export default function LoginScreen() {
         }
         try {
             const response = await Api.login(email, password)
-
-            if (response && response.token) {
-                setMessage('login feito com sucesso!');
-                setIsErrorModalVisible(true);
+            if (response && response.data.token) {
+                navigation.navigate('Home');
               } else {
                 if (response && response.errors) {
                   setMessage(response.errors.join('\n'));
@@ -45,7 +43,7 @@ export default function LoginScreen() {
               }
         } catch (error) {
             console.log(error)
-            setMessage('Erro ao realizar o cadastro');
+            setMessage('Erro ao realizar o login');
             setIsErrorModalVisible(true);
         }
 
